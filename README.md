@@ -1,0 +1,1138 @@
+# Hireing-web
+this is a web for HR to do direct shoertlisting of the candidates
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HireFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --surface2: #f0ede6;
+  --border: #e2ddd5;
+  --accent: #1a1a2e;
+  --green: #2d6a4f;
+  --green-light: #d8f3dc;
+  --red: #9b2226;
+  --red-light: #fde8e8;
+  --amber: #b45309;
+  --amber-light: #fef3c7;
+  --blue: #1e40af;
+  --blue-light: #dbeafe;
+  --text: #1a1a2e;
+  --muted: #6b6570;
+  --ink: #2d2a3e;
+  --tag: #e8e4f0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  font-size: 14px;
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 240px;
+  background: var(--accent);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+}
+
+.logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.logo-text {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.logo-text span { color: #86efac; }
+.logo-sub { font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+.nav { padding: 16px 12px; flex: 1; }
+.nav-section { font-size: 9px; color: rgba(255,255,255,0.25); letter-spacing: 2px; text-transform: uppercase; padding: 12px 12px 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 8px;
+  color: rgba(255,255,255,0.55); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s; margin-bottom: 2px;
+}
+.nav-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+.nav-item.active { background: rgba(134,239,172,0.15); color: #86efac; }
+.nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+.nav-badge {
+  margin-left: auto; background: rgba(134,239,172,0.2); color: #86efac;
+  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px;
+}
+
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.user-pill {
+  display: flex; align-items: center; gap: 10px;
+}
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #86efac, #60a5fa);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--accent); flex-shrink: 0;
+}
+.user-name { font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 500; }
+.user-role { font-size: 10px; color: rgba(255,255,255,0.3); }
+
+/* ─── MAIN ─── */
+.main {
+  margin-left: 240px;
+  flex: 1;
+  min-height: 100vh;
+}
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.breadcrumb { font-size: 12px; color: var(--muted); }
+.breadcrumb span { color: var(--text); font-weight: 600; }
+.search-bar {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 12px; width: 220px;
+}
+.search-bar input {
+  border: none; background: transparent; outline: none;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); width: 100%;
+}
+.search-bar input::placeholder { color: var(--muted); }
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); background: var(--surface);
+  cursor: pointer; font-size: 16px; transition: all 0.15s; position: relative;
+}
+.icon-btn:hover { background: var(--surface2); }
+.notif-dot {
+  position: absolute; top: 6px; right: 6px;
+  width: 7px; height: 7px; background: #ef4444; border-radius: 50%;
+  border: 1.5px solid white;
+}
+
+.btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #2d2a3e; }
+.btn-outline {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover { background: var(--surface2); }
+.btn-danger { background: var(--red); color: #fff; }
+.btn-green { background: var(--green); color: #fff; }
+
+/* ─── PAGES ─── */
+.page { display: none; padding: 32px; }
+.page.active { display: block; }
+
+/* ─── DASHBOARD ─── */
+.page-header { margin-bottom: 28px; }
+.page-title {
+  font-family: 'Fraunces', serif;
+  font-size: 30px; font-weight: 900; letter-spacing: -1px; line-height: 1;
+}
+.page-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px;
+  cursor: pointer; transition: all 0.2s;
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.stat-label { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.stat-value { font-family: 'Fraunces', serif; font-size: 38px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+.stat-change { font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+.stat-change.up { color: var(--green); }
+.stat-change.down { color: var(--red); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px;
+}
+.panel-title { font-size: 13px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.panel-link { font-size: 12px; color: var(--blue); cursor: pointer; font-weight: 400; }
+.panel-link:hover { text-decoration: underline; }
+
+/* mini chart bars */
+.chart-bars { display: flex; gap: 6px; align-items: flex-end; height: 80px; }
+.bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bar {
+  width: 100%; border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #86efac, #4ade80);
+  transition: height 0.4s ease;
+}
+.bar-label { font-size: 10px; color: var(--muted); }
+
+/* funnel */
+.funnel-row {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+}
+.funnel-label { font-size: 12px; color: var(--muted); width: 90px; flex-shrink: 0; }
+.funnel-bar-bg { flex: 1; height: 10px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+.funnel-bar-fill { height: 100%; border-radius: 99px; background: var(--accent); transition: width 0.6s ease; }
+.funnel-val { font-size: 12px; font-weight: 600; width: 36px; text-align: right; }
+
+/* recent list */
+.recent-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer;
+  transition: all 0.15s;
+}
+.recent-item:last-child { border-bottom: none; }
+.recent-item:hover { padding-left: 4px; }
+.ri-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ri-name { font-size: 13px; font-weight: 500; flex: 1; }
+.ri-role { font-size: 11px; color: var(--muted); }
+.ri-badge { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 99px; }
+
+/* ─── TABLE ─── */
+.table-controls {
+  display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;
+}
+.filter-tabs { display: flex; gap: 4px; }
+.filter-tab {
+  padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 600;
+  cursor: pointer; border: 1px solid var(--border); background: var(--surface);
+  transition: all 0.15s;
+}
+.filter-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.filter-tab:hover:not(.active) { background: var(--surface2); }
+
+.data-table {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left; padding: 12px 16px;
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border); background: var(--surface2);
+}
+td { padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr.data-row { cursor: pointer; transition: background 0.1s; }
+tr.data-row:hover td { background: var(--bg); }
+
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+.badge-green { background: var(--green-light); color: var(--green); }
+.badge-red { background: var(--red-light); color: var(--red); }
+.badge-amber { background: var(--amber-light); color: var(--amber); }
+.badge-blue { background: var(--blue-light); color: var(--blue); }
+.badge-gray { background: var(--surface2); color: var(--muted); }
+
+.score-bar { display: flex; align-items: center; gap: 8px; }
+.score-dots { display: flex; gap: 3px; }
+.score-dot { width: 8px; height: 8px; border-radius: 50%; }
+.score-dot.filled { background: var(--accent); }
+.score-dot.empty { background: var(--surface2); border: 1px solid var(--border); }
+.score-text { font-size: 12px; font-weight: 600; }
+
+.action-btns { display: flex; gap: 6px; }
+.act { padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); transition: all 0.15s; }
+.act:hover { background: var(--surface2); }
+.act.danger { color: var(--red); border-color: var(--red-light); }
+.act.danger:hover { background: var(--red-light); border-color: var(--red); }
+
+/* ─── HIRING LINKS ─── */
+.link-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px; margin-bottom: 14px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: flex-start; gap: 16px;
+}
+.link-card:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); border-color: #c8c2d8; }
+.link-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: var(--tag); display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.link-info { flex: 1; }
+.link-title { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.link-company { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.link-meta { display: flex; gap: 16px; }
+.link-stat { font-size: 12px; color: var(--muted); }
+.link-stat strong { color: var(--text); font-weight: 700; }
+.link-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; flex-shrink: 0; }
+
+.slug-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 10px; font-family: 'DM Mono', monospace;
+  font-size: 11px; color: var(--muted); cursor: pointer; transition: all 0.15s;
+}
+.slug-pill:hover { border-color: var(--accent); color: var(--text); }
+
+/* ─── MODALS ─── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(26,26,46,0.6);
+  backdrop-filter: blur(4px); z-index: 1000;
+  display: none; align-items: center; justify-content: center;
+  animation: fadeIn 0.15s ease;
+}
+.modal-overlay.open { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  background: var(--surface); border-radius: 18px;
+  width: 90%; max-width: 560px; max-height: 90vh;
+  overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+  animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-lg { max-width: 740px; }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.modal-header {
+  padding: 24px 28px 0;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.modal-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 900; letter-spacing: -0.5px; }
+.modal-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border: 1px solid var(--border); background: var(--surface);
+  font-size: 18px; color: var(--muted); flex-shrink: 0; transition: all 0.15s;
+}
+.modal-close:hover { background: var(--surface2); color: var(--text); }
+
+.modal-body { padding: 20px 28px; }
+.modal-footer {
+  padding: 16px 28px 24px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 10px; justify-content: flex-end;
+}
+
+/* forms */
+.form-group { margin-bottom: 16px; }
+.form-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
+.form-input, .form-textarea, .form-select {
+  width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: 9px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  color: var(--text); background: var(--surface); outline: none; transition: border-color 0.15s;
+  appearance: none;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--accent); }
+.form-textarea { min-height: 90px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.mcq-item {
+  background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 10px;
+}
+.mcq-q { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+.mcq-options { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.mcq-opt {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 10px; border-radius: 7px; border: 1.5px solid var(--border);
+  cursor: pointer; font-size: 12px; transition: all 0.15s; background: var(--surface);
+}
+.mcq-opt:hover { border-color: var(--accent); }
+.mcq-opt.correct { border-color: var(--green); background: var(--green-light); color: var(--green); font-weight: 600; }
+.mcq-opt input[type=radio] { display: none; }
+
+/* drag drop */
+.dropzone {
+  border: 2px dashed var(--border); border-radius: 12px; padding: 32px;
+  text-align: center; cursor: pointer; transition: all 0.2s;
+  background: var(--bg);
+}
+.dropzone:hover, .dropzone.drag { border-color: var(--accent); background: rgba(26,26,46,0.03); }
+.dropzone .dz-icon { font-size: 36px; margin-bottom: 10px; }
+.dropzone .dz-text { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.dropzone .dz-sub { font-size: 11px; color: var(--muted); }
+.progress-bar { height: 6px; background: var(--surface2); border-radius: 99px; margin-top: 16px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--green), #4ade80); width: 0; transition: width 0.3s; }
+
+/* candidate detail */
+.cand-header { display: flex; gap: 16px; align-items: flex-start; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.cand-avatar {
+  width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 22px; font-weight: 900; color: #fff;
+}
+.cand-name { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 900; letter-spacing: -0.5px; }
+.cand-role { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.cand-tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.info-cell { background: var(--bg); border-radius: 10px; padding: 12px 14px; }
+.info-cell-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.info-cell-val { font-size: 14px; font-weight: 600; }
+
+.q-result { padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.q-result:last-child { border-bottom: none; }
+.q-icon { font-size: 16px; flex-shrink: 0; }
+.q-text { font-size: 12px; flex: 1; }
+.q-ans { font-size: 11px; color: var(--muted); }
+.q-ans strong { font-weight: 700; }
+
+/* notification */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--accent); color: #fff;
+  padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 500;
+  z-index: 9999; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  transform: translateY(80px); opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* assessment preview */
+.q-card {
+  background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 20px;
+  margin-bottom: 12px;
+}
+.q-num { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.q-body { font-size: 15px; font-weight: 600; margin-bottom: 16px; line-height: 1.4; }
+.q-opts { display: flex; flex-direction: column; gap: 8px; }
+.q-opt-btn {
+  padding: 11px 16px; border: 1.5px solid var(--border); border-radius: 9px;
+  text-align: left; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  background: var(--surface); transition: all 0.15s; font-weight: 500;
+}
+.q-opt-btn:hover { border-color: var(--accent); background: rgba(26,26,46,0.03); }
+.q-opt-btn.selected { border-color: var(--accent); background: rgba(26,26,46,0.06); font-weight: 600; }
+.q-opt-btn.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.q-opt-btn.wrong { border-color: var(--red); background: var(--red-light); color: var(--red); }
+
+.timer-bar { height: 4px; background: var(--surface2); border-radius: 99px; margin-bottom: 20px; overflow: hidden; }
+.timer-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.1s linear; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+/* analytics */
+.analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.big-chart-bars { display: flex; gap: 12px; align-items: flex-end; height: 140px; padding: 0 8px; }
+.big-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
+.big-bar {
+  width: 100%; border-radius: 6px 6px 0 0; cursor: pointer; transition: opacity 0.15s;
+  background: linear-gradient(180deg, #86efac, #4ade80);
+  position: relative; overflow: hidden;
+}
+.big-bar:hover { opacity: 0.8; }
+.big-bar::after {
+  content: attr(data-val);
+  position: absolute; top: 4px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; font-weight: 700; color: var(--green);
+}
+.big-bar-label { font-size: 10px; color: var(--muted); }
+
+.q-perf-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.q-perf-label { font-size: 11px; color: var(--muted); width: 80px; flex-shrink: 0; }
+.q-perf-bg { flex: 1; height: 12px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+.q-perf-fill { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+.q-perf-pct { font-size: 11px; font-weight: 700; width: 36px; text-align: right; }
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-text">Hire<span>Flow</span></div>
+    <div class="logo-sub">Recruiter Platform</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Main</div>
+    <div class="nav-item active" onclick="nav('dashboard', this)"><span class="icon">▦</span> Dashboard</div>
+    <div class="nav-item" onclick="nav('links', this)"><span class="icon">🔗</span> Hiring Links <span class="nav-badge">4</span></div>
+    <div class="nav-item" onclick="nav('candidates', this)"><span class="icon">👥</span> Candidates <span class="nav-badge">247</span></div>
+    <div class="nav-section">Insights</div>
+    <div class="nav-item" onclick="nav('analytics', this)"><span class="icon">📊</span> Analytics</div>
+    <div class="nav-item" onclick="nav('settings', this)"><span class="icon">⚙️</span> Settings</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-pill">
+      <div class="avatar">AS</div>
+      <div>
+        <div class="user-name">Aryan Shah</div>
+        <div class="user-role">Admin</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="breadcrumb" id="breadcrumb">Overview / <span>Dashboard</span></div>
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Search candidates, links...">
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn" onclick="showToast('📧 No new messages')">✉️<div class="notif-dot"></div></div>
+      <div class="icon-btn" onclick="showToast('🔔 3 new applications today!')">🔔<div class="notif-dot"></div></div>
+      <button class="btn btn-primary" onclick="openModal('createLinkModal')">+ New Hiring Link</button>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: DASHBOARD ===== -->
+  <div id="page-dashboard" class="page active">
+    <div class="page-header">
+      <div class="page-title">Good morning, Aryan 👋</div>
+      <div class="page-sub">Sunday, Feb 22 · Here's your hiring overview</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card" onclick="nav('candidates', document.querySelector('[onclick*=candidates]'))">
+        <div class="stat-label">Total Applicants</div>
+        <div class="stat-value" style="color:#1a1a2e">247</div>
+        <div class="stat-change up">↑ 18% from last week</div>
+      </div>
+      <div class="stat-card" onclick="filterCandidates('shortlisted'); nav('candidates', document.querySelectorAll('.nav-item')[2])">
+        <div class="stat-label">Shortlisted</div>
+        <div class="stat-value" style="color:var(--green)">42</div>
+        <div class="stat-change up">↑ 6 new this week</div>
+      </div>
+      <div class="stat-card" onclick="filterCandidates('knocked'); nav('candidates', document.querySelectorAll('.nav-item')[2])">
+        <div class="stat-label">Knocked Out</div>
+        <div class="stat-value" style="color:var(--red)">131</div>
+        <div class="stat-change down">53% knockout rate</div>
+      </div>
+      <div class="stat-card" onclick="nav('links', document.querySelectorAll('.nav-item')[1])">
+        <div class="stat-label">Active Links</div>
+        <div class="stat-value" style="color:var(--blue)">4</div>
+        <div class="stat-change up">↑ 1 created today</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">
+          Weekly Applications
+          <span class="panel-link" onclick="nav('analytics', document.querySelectorAll('.nav-item')[3])">View full →</span>
+        </div>
+        <div class="chart-bars" id="miniChart"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Conversion Funnel</div>
+        <div>
+          <div class="funnel-row"><div class="funnel-label">Link Views</div><div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:100%; background:var(--accent)"></div></div><div class="funnel-val">612</div></div>
+          <div class="funnel-row"><div class="funnel-label">Started</div><div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:70%; background:#4338ca"></div></div><div class="funnel-val">429</div></div>
+          <div class="funnel-row"><div class="funnel-label">Completed</div><div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:40%; background:var(--blue)"></div></div><div class="funnel-val">247</div></div>
+          <div class="funnel-row"><div class="funnel-label">Shortlisted</div><div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:7%; background:var(--green)"></div></div><div class="funnel-val">42</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Recent Candidates <span class="panel-link" onclick="nav('candidates', document.querySelectorAll('.nav-item')[2])">View all →</span></div>
+      <div id="recentList"></div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: HIRING LINKS ===== -->
+  <div id="page-links" class="page">
+    <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div class="page-title">Hiring Links</div>
+        <div class="page-sub">Create and manage your shareable assessment links</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('createLinkModal')">+ New Hiring Link</button>
+    </div>
+    <div id="linksList"></div>
+  </div>
+
+  <!-- ===== PAGE: CANDIDATES ===== -->
+  <div id="page-candidates" class="page">
+    <div class="page-header">
+      <div class="page-title">Candidates</div>
+      <div class="page-sub">All applicants across your hiring links</div>
+    </div>
+    <div class="table-controls">
+      <div class="filter-tabs">
+        <div class="filter-tab active" onclick="filterCandidates('all', this)">All (247)</div>
+        <div class="filter-tab" onclick="filterCandidates('shortlisted', this)">Shortlisted (42)</div>
+        <div class="filter-tab" onclick="filterCandidates('knocked', this)">Knocked Out (131)</div>
+        <div class="filter-tab" onclick="filterCandidates('pending', this)">Pending (74)</div>
+      </div>
+      <button class="btn btn-outline" onclick="showToast('📁 Exporting CSV...')">⬇ Export CSV</button>
+    </div>
+    <div class="data-table">
+      <table>
+        <thead><tr>
+          <th>Candidate</th><th>Position</th><th>Status</th><th>Score</th><th>Applied</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="candidateTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: ANALYTICS ===== -->
+  <div id="page-analytics" class="page">
+    <div class="page-header">
+      <div class="page-title">Analytics</div>
+      <div class="page-sub">Performance insights across all your hiring links</div>
+    </div>
+    <div class="stat-grid" style="margin-bottom:28px">
+      <div class="stat-card"><div class="stat-label">Avg Completion Time</div><div class="stat-value" style="color:var(--blue)">8.4<span style="font-size:16px;color:var(--muted)">min</span></div><div class="stat-change">Per assessment</div></div>
+      <div class="stat-card"><div class="stat-label">Pass Rate</div><div class="stat-value" style="color:var(--green)">17<span style="font-size:16px;color:var(--muted)">%</span></div><div class="stat-change up">↑ 3% this month</div></div>
+      <div class="stat-card"><div class="stat-label">Knockout Q1</div><div class="stat-value" style="color:var(--red)">62<span style="font-size:16px;color:var(--muted)">%</span></div><div class="stat-change down">Hardest question</div></div>
+      <div class="stat-card"><div class="stat-label">Avg Score</div><div class="stat-value" style="color:var(--amber)">2.8<span style="font-size:16px;color:var(--muted)">/5</span></div><div class="stat-change">Across all roles</div></div>
+    </div>
+    <div class="analytics-grid">
+      <div class="panel">
+        <div class="panel-title">Monthly Applications</div>
+        <div class="big-chart-bars" id="bigChart"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Question-wise Pass Rate</div>
+        <div id="qPerfChart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: SETTINGS ===== -->
+  <div id="page-settings" class="page">
+    <div class="page-header"><div class="page-title">Settings</div><div class="page-sub">Manage your account and preferences</div></div>
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title">Profile</div>
+        <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" value="Aryan Shah"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="aryan@hireflow.app"></div>
+        <div class="form-group"><label class="form-label">Company</label><input class="form-input" value="Infosys Ltd."></div>
+        <button class="btn btn-primary" onclick="showToast('✅ Profile saved!')">Save Changes</button>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Notifications</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px">
+            <div>New application <div style="font-size:11px;color:var(--muted)">Get notified on each apply</div></div>
+            <label class="toggle"><input type="checkbox" checked onchange="showToast(this.checked ? '🔔 Enabled' : '🔕 Disabled')"><span></span></label>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px">
+            <div>Daily digest <div style="font-size:11px;color:var(--muted)">Summary every morning</div></div>
+            <label class="toggle"><input type="checkbox" onchange="showToast(this.checked ? '🔔 Enabled' : '🔕 Disabled')"><span></span></label>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px">
+            <div>Shortlist alerts <div style="font-size:11px;color:var(--muted)">When someone passes all MCQs</div></div>
+            <label class="toggle"><input type="checkbox" checked onchange="showToast(this.checked ? '🔔 Enabled' : '🔕 Disabled')"><span></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ===== MODAL: CREATE HIRING LINK ===== -->
+<div id="createLinkModal" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div><div class="modal-title">Create Hiring Link</div><div class="modal-sub">Set up a new role assessment</div></div>
+      <div class="modal-close" onclick="closeModal('createLinkModal')">×</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Job Title</label><input class="form-input" placeholder="e.g. Frontend Engineer"></div>
+        <div class="form-group"><label class="form-label">Company</label><input class="form-input" placeholder="e.g. Infosys Ltd."></div>
+      </div>
+      <div class="form-group"><label class="form-label">Job Description</label><textarea class="form-textarea" placeholder="Describe the role, responsibilities..."></textarea></div>
+      <div class="form-group">
+        <label class="form-label">Custom Slug</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">hireflow.app/apply/</span>
+          <input class="form-input" style="flex:1" placeholder="frontend-eng-2026" id="slugInput" oninput="updateSlugPreview()">
+        </div>
+        <div style="margin-top:6px;font-size:11px;color:var(--muted)" id="slugPreview">🔗 hireflow.app/apply/your-slug</div>
+      </div>
+      <div style="margin-bottom:14px;font-size:13px;font-weight:700">MCQ Assessment (5 questions)</div>
+      <div id="mcqBuilder"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('createLinkModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createLink()">Create Hiring Link 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: CANDIDATE DETAIL ===== -->
+<div id="candidateModal" class="modal-overlay">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div><div class="modal-title" id="cand-modal-title">Candidate Detail</div></div>
+      <div class="modal-close" onclick="closeModal('candidateModal')">×</div>
+    </div>
+    <div class="modal-body" id="candidateModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="showToast('📧 Status email sent!'); closeModal('candidateModal')">Send Status Email</button>
+      <button class="btn btn-outline" onclick="showToast('📄 Downloading resume...')">⬇ Download Resume</button>
+      <button class="btn btn-green" onclick="shortlistCandidate()">✓ Shortlist</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: LINK DETAIL ===== -->
+<div id="linkModal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title" id="link-modal-title">Link Detail</div><div class="modal-sub" id="link-modal-sub"></div></div>
+      <div class="modal-close" onclick="closeModal('linkModal')">×</div>
+    </div>
+    <div class="modal-body" id="linkModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="showToast('🔗 Link copied!'); closeModal('linkModal')">Copy Link</button>
+      <button class="btn btn-outline" onclick="openAssessmentPreview(); closeModal('linkModal')">Preview Assessment</button>
+      <button class="btn btn-danger" onclick="showToast('🗑 Link deleted'); closeModal('linkModal')">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: ASSESSMENT PREVIEW ===== -->
+<div id="assessmentModal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title">Assessment Preview</div><div class="modal-sub">As seen by candidates</div></div>
+      <div class="modal-close" onclick="closeModal('assessmentModal'); clearAssessment()">×</div>
+    </div>
+    <div class="modal-body" id="assessmentBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<style>
+/* toggle switch */
+.toggle { position: relative; display: inline-block; width: 42px; height: 24px; }
+.toggle input { display: none; }
+.toggle span {
+  position: absolute; inset: 0; border-radius: 99px; background: var(--border);
+  cursor: pointer; transition: background 0.2s;
+}
+.toggle span::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px; border-radius: 50%; background: #fff;
+  transition: transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle input:checked + span { background: var(--green); }
+.toggle input:checked + span::after { transform: translateX(18px); }
+</style>
+
+<script>
+// ─── DATA ───
+const candidates = [
+  { id:1, name:'Priya Sharma', email:'priya@email.com', role:'Frontend Engineer', status:'shortlisted', score:5, date:'Feb 21', color:'#4f46e5' },
+  { id:2, name:'Rahul Mehta', email:'rahul@email.com', role:'Backend Developer', status:'knocked', score:2, date:'Feb 21', color:'#dc2626' },
+  { id:3, name:'Ananya Iyer', email:'ananya@email.com', role:'Product Manager', status:'shortlisted', score:4, date:'Feb 20', color:'#059669' },
+  { id:4, name:'Dev Patel', email:'dev@email.com', role:'Full Stack Dev', status:'pending', score:null, date:'Feb 20', color:'#d97706' },
+  { id:5, name:'Sana Khan', email:'sana@email.com', role:'UI/UX Designer', status:'knocked', score:1, date:'Feb 19', color:'#7c3aed' },
+  { id:6, name:'Arjun Nair', email:'arjun@email.com', role:'Frontend Engineer', status:'shortlisted', score:5, date:'Feb 18', color:'#0891b2' },
+  { id:7, name:'Meera Reddy', email:'meera@email.com', role:'Data Analyst', status:'knocked', score:2, date:'Feb 18', color:'#be185d' },
+  { id:8, name:'Kiran Joshi', email:'kiran@email.com', role:'Backend Developer', status:'pending', score:null, date:'Feb 17', color:'#15803d' },
+];
+
+const links = [
+  { id:1, title:'Frontend Engineer', company:'Infosys Ltd.', slug:'frontend-eng-2026', emoji:'💻', views:312, starts:218, completions:134, shortlisted:22, status:'active' },
+  { id:2, title:'Product Manager', company:'Infosys Ltd.', slug:'pm-role-2026', emoji:'📋', views:180, starts:124, completions:76, shortlisted:14, status:'active' },
+  { id:3, title:'UI/UX Designer', company:'Infosys Ltd.', slug:'ux-designer-2026', emoji:'🎨', views:95, starts:62, completions:30, shortlisted:5, status:'active' },
+  { id:4, title:'Data Analyst', company:'Infosys Ltd.', slug:'data-analyst-2026', emoji:'📊', views:25, starts:18, completions:7, shortlisted:1, status:'active' },
+];
+
+const mcqData = [
+  { q: 'What does CSS stand for?', opts: ['Cascading Style Sheets', 'Creative Style Syntax', 'Computer Style System', 'Coded Sheet Styling'], ans: 0 },
+  { q: 'Which hook is used for side effects in React?', opts: ['useState', 'useEffect', 'useRef', 'useContext'], ans: 1 },
+  { q: 'What is Big O notation used for?', opts: ['Database schema design', 'Algorithm complexity', 'CSS animations', 'HTTP methods'], ans: 1 },
+  { q: 'What does API stand for?', opts: ['Application Programming Interface', 'Advanced Program Integration', 'Automated Processing Input', 'Application Process Index'], ans: 0 },
+  { q: 'Which of these is NOT a JavaScript data type?', opts: ['Symbol', 'Float', 'BigInt', 'Undefined'], ans: 1 },
+];
+
+let currentFilter = 'all';
+let assessmentState = { q: 0, answers: [], timer: null, timerVal: 30 };
+
+// ─── NAVIGATION ───
+function nav(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  if (el) el.classList.add('active');
+  const labels = { dashboard: 'Dashboard', links: 'Hiring Links', candidates: 'Candidates', analytics: 'Analytics', settings: 'Settings' };
+  document.getElementById('breadcrumb').innerHTML = `Overview / <span>${labels[page]}</span>`;
+  if (page === 'analytics') renderAnalytics();
+}
+
+// ─── RENDER MINI CHART ───
+function renderMiniChart() {
+  const vals = [32, 45, 28, 60, 42, 71, 55];
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const max = Math.max(...vals);
+  const el = document.getElementById('miniChart');
+  el.innerHTML = vals.map((v, i) => `
+    <div class="bar-wrap">
+      <div class="bar" style="height:${(v/max)*70}px" title="${v} apps"></div>
+      <div class="bar-label">${days[i]}</div>
+    </div>`).join('');
+}
+
+// ─── RENDER RECENT ───
+function renderRecent() {
+  const el = document.getElementById('recentList');
+  const colors = { shortlisted: '#2d6a4f', knocked: '#9b2226', pending: '#b45309' };
+  el.innerHTML = candidates.slice(0, 5).map(c => `
+    <div class="recent-item" onclick="openCandidateModal(${c.id})">
+      <div class="ri-dot" style="background:${colors[c.status]}"></div>
+      <div style="flex:1">
+        <div class="ri-name">${c.name}</div>
+        <div class="ri-role">${c.role}</div>
+      </div>
+      <div class="ri-badge ${c.status === 'shortlisted' ? 'badge-green' : c.status === 'knocked' ? 'badge-red' : 'badge-amber'}">${c.status}</div>
+    </div>`).join('');
+}
+
+// ─── RENDER LINKS ───
+function renderLinks() {
+  const el = document.getElementById('linksList');
+  el.innerHTML = links.map(l => `
+    <div class="link-card" onclick="openLinkModal(${l.id})">
+      <div class="link-icon">${l.emoji}</div>
+      <div class="link-info">
+        <div class="link-title">${l.title}</div>
+        <div class="link-company">${l.company}</div>
+        <div class="link-meta">
+          <div class="link-stat"><strong>${l.views}</strong> views</div>
+          <div class="link-stat"><strong>${l.starts}</strong> started</div>
+          <div class="link-stat"><strong>${l.completions}</strong> completed</div>
+          <div class="link-stat"><strong>${l.shortlisted}</strong> shortlisted</div>
+        </div>
+      </div>
+      <div class="link-actions" onclick="event.stopPropagation()">
+        <span class="badge badge-green">● Active</span>
+        <div class="slug-pill" onclick="copySlug('${l.slug}')">/${l.slug} ⎘</div>
+        <button class="act" onclick="openAssessmentPreview()">Preview</button>
+      </div>
+    </div>`).join('');
+}
+
+// ─── RENDER CANDIDATES ───
+function renderCandidates(filter = 'all') {
+  const filtered = filter === 'all' ? candidates : candidates.filter(c =>
+    filter === 'shortlisted' ? c.status === 'shortlisted' :
+    filter === 'knocked' ? c.status === 'knocked' : c.status === 'pending');
+  const el = document.getElementById('candidateTable');
+  el.innerHTML = filtered.map(c => {
+    const dots = c.score !== null ? Array(5).fill(0).map((_, i) => `<div class="score-dot ${i < c.score ? 'filled' : 'empty'}"></div>`).join('') : '—';
+    const scoreHtml = c.score !== null ? `<div class="score-bar"><div class="score-dots">${dots}</div><div class="score-text">${c.score}/5</div></div>` : '<span style="color:var(--muted)">Pending</span>';
+    const badges = { shortlisted: 'badge-green', knocked: 'badge-red', pending: 'badge-amber' };
+    return `<tr class="data-row" onclick="openCandidateModal(${c.id})">
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div class="avatar" style="width:32px;height:32px;font-size:12px;background:${c.color}">${c.name.split(' ').map(w=>w[0]).join('')}</div>
+        <div><div style="font-weight:600">${c.name}</div><div style="font-size:11px;color:var(--muted)">${c.email}</div></div>
+      </div></td>
+      <td>${c.role}</td>
+      <td><span class="badge ${badges[c.status]}">${c.status}</span></td>
+      <td>${scoreHtml}</td>
+      <td style="color:var(--muted)">${c.date}</td>
+      <td onclick="event.stopPropagation()"><div class="action-btns">
+        <div class="act" onclick="openCandidateModal(${c.id})">View</div>
+        <div class="act" onclick="showToast('📧 Email sent to ${c.name}!')">Email</div>
+        <div class="act danger" onclick="showToast('🗑 Removed')">Delete</div>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterCandidates(f, el) {
+  currentFilter = f;
+  renderCandidates(f);
+  if (el) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+}
+
+// ─── CANDIDATE MODAL ───
+function openCandidateModal(id) {
+  const c = candidates.find(x => x.id === id);
+  document.getElementById('cand-modal-title').textContent = c.name;
+  const badges = { shortlisted: 'badge-green', knocked: 'badge-red', pending: 'badge-amber' };
+  const qResults = c.score !== null ? mcqData.map((q, i) => {
+    const passed = i < c.score;
+    return `<div class="q-result">
+      <div class="q-icon">${passed ? '✅' : '❌'}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-ans">Answered: <strong>${q.opts[passed ? q.ans : (q.ans+1)%4]}</strong></div>
+    </div>`;
+  }).join('') : '<div style="color:var(--muted);font-size:13px">Assessment not yet completed.</div>';
+
+  document.getElementById('candidateModalBody').innerHTML = `
+    <div class="cand-header">
+      <div class="cand-avatar" style="background:${c.color}">${c.name.split(' ').map(w=>w[0]).join('')}</div>
+      <div>
+        <div class="cand-name">${c.name}</div>
+        <div class="cand-role">${c.role}</div>
+        <div class="cand-tags">
+          <span class="badge ${badges[c.status]}">${c.status}</span>
+          <span class="badge badge-gray">Applied ${c.date}</span>
+          ${c.score !== null ? `<span class="badge badge-blue">Score: ${c.score}/5</span>` : ''}
+        </div>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-cell"><div class="info-cell-label">Email</div><div class="info-cell-val" style="font-size:13px">${c.email}</div></div>
+      <div class="info-cell"><div class="info-cell-label">Applied For</div><div class="info-cell-val">${c.role}</div></div>
+      <div class="info-cell"><div class="info-cell-label">Score</div><div class="info-cell-val">${c.score !== null ? c.score + '/5' : 'N/A'}</div></div>
+      <div class="info-cell"><div class="info-cell-label">Applied Date</div><div class="info-cell-val">${c.date}</div></div>
+    </div>
+    <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">Assessment Results</div>
+    ${qResults}
+  `;
+  openModal('candidateModal');
+}
+
+function shortlistCandidate() {
+  showToast('✅ Candidate shortlisted & notified!');
+  closeModal('candidateModal');
+}
+
+// ─── LINK MODAL ───
+function openLinkModal(id) {
+  const l = links.find(x => x.id === id);
+  document.getElementById('link-modal-title').textContent = `${l.emoji} ${l.title}`;
+  document.getElementById('link-modal-sub').textContent = l.company;
+  const pct = v => Math.round((v/l.views)*100);
+  document.getElementById('linkModalBody').innerHTML = `
+    <div class="info-grid" style="margin-bottom:16px">
+      <div class="info-cell"><div class="info-cell-label">Views</div><div class="info-cell-val">${l.views}</div></div>
+      <div class="info-cell"><div class="info-cell-label">Started</div><div class="info-cell-val">${l.starts} <span style="font-size:11px;color:var(--muted)">(${pct(l.starts)}%)</span></div></div>
+      <div class="info-cell"><div class="info-cell-label">Completed</div><div class="info-cell-val">${l.completions} <span style="font-size:11px;color:var(--muted)">(${pct(l.completions)}%)</span></div></div>
+      <div class="info-cell"><div class="info-cell-label">Shortlisted</div><div class="info-cell-val">${l.shortlisted} <span style="font-size:11px;color:var(--muted)">(${pct(l.shortlisted)}%)</span></div></div>
+    </div>
+    <div class="form-group"><label class="form-label">Shareable Link</label>
+      <div class="slug-pill" style="width:100%;justify-content:space-between;cursor:pointer" onclick="copySlug('${l.slug}')">
+        <span>hireflow.app/apply/${l.slug}</span><span>⎘ Copy</span>
+      </div>
+    </div>
+  `;
+  openModal('linkModal');
+}
+
+// ─── MCQ BUILDER ───
+function renderMCQBuilder() {
+  const el = document.getElementById('mcqBuilder');
+  el.innerHTML = mcqData.map((m, qi) => `
+    <div class="mcq-item">
+      <div class="mcq-q">Q${qi+1}: ${m.q}</div>
+      <div class="mcq-options">${m.opts.map((o, oi) => `
+        <label class="mcq-opt ${oi === m.ans ? 'correct' : ''}">
+          <input type="radio" name="q${qi}" value="${oi}" ${oi === m.ans ? 'checked' : ''}>
+          <span>${o}</span>
+        </label>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function updateSlugPreview() {
+  const v = document.getElementById('slugInput').value || 'your-slug';
+  document.getElementById('slugPreview').textContent = `🔗 hireflow.app/apply/${v.toLowerCase().replace(/\s+/g, '-')}`;
+}
+
+function createLink() {
+  showToast('🚀 Hiring link created & live!');
+  closeModal('createLinkModal');
+}
+
+// ─── ASSESSMENT PREVIEW ───
+function openAssessmentPreview() {
+  assessmentState = { q: 0, answers: [], timer: null, timerVal: 30 };
+  renderAssessmentQ();
+  openModal('assessmentModal');
+}
+
+function renderAssessmentQ() {
+  const s = assessmentState;
+  if (s.q >= mcqData.length) { renderAssessmentResult(); return; }
+  const q = mcqData[s.q];
+  s.timerVal = 30;
+  clearInterval(s.timer);
+  s.timer = setInterval(() => {
+    s.timerVal--;
+    const fill = document.getElementById('timerFill');
+    if (fill) fill.style.width = (s.timerVal/30*100) + '%';
+    if (s.timerVal <= 0) { clearInterval(s.timer); submitAnswer(-1); }
+  }, 1000);
+
+  document.getElementById('assessmentBody').innerHTML = `
+    <div style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px">
+        <span>Question ${s.q+1} of ${mcqData.length}</span><span id="timerLabel">⏱ ${s.timerVal}s</span>
+      </div>
+      <div class="timer-bar"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+    </div>
+    <div class="q-card">
+      <div class="q-num">Question ${s.q+1}</div>
+      <div class="q-body">${q.q}</div>
+      <div class="q-opts">${q.opts.map((o, i) => `
+        <button class="q-opt-btn" onclick="submitAnswer(${i})">${o}</button>`).join('')}
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">
+      You cannot go back after answering.
+    </div>`;
+
+  // update timer label
+  const interval = setInterval(() => {
+    const lbl = document.getElementById('timerLabel');
+    if (lbl && s.timer) lbl.textContent = `⏱ ${s.timerVal}s`;
+    else clearInterval(interval);
+  }, 1000);
+}
+
+function submitAnswer(chosen) {
+  clearInterval(assessmentState.timer);
+  const q = mcqData[assessmentState.q];
+  const correct = chosen === q.ans;
+  assessmentState.answers.push({ chosen, correct });
+
+  // highlight answer
+  const btns = document.querySelectorAll('.q-opt-btn');
+  btns.forEach((b, i) => {
+    if (i === q.ans) b.classList.add('correct');
+    else if (i === chosen && !correct) b.classList.add('wrong');
+    b.disabled = true;
+  });
+
+  if (!correct && chosen !== -1) {
+    // knockout
+    setTimeout(() => {
+      document.getElementById('assessmentBody').innerHTML = `
+        <div style="text-align:center;padding:32px 0">
+          <div style="font-size:56px;margin-bottom:16px">💥</div>
+          <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--red);margin-bottom:8px">Knocked Out!</div>
+          <div style="font-size:14px;color:var(--muted);margin-bottom:24px">Sorry! Your answer was incorrect.<br>This was a knockout question.</div>
+          <div style="background:var(--red-light);border-radius:10px;padding:14px;font-size:13px;margin-bottom:20px">
+            <strong>Correct answer:</strong> ${q.opts[q.ans]}
+          </div>
+          <button class="btn btn-outline" style="margin:0 auto" onclick="closeModal('assessmentModal'); clearAssessment()">Close Preview</button>
+        </div>`;
+    }, 800);
+    return;
+  }
+
+  setTimeout(() => {
+    assessmentState.q++;
+    renderAssessmentQ();
+  }, 700);
+}
+
+function renderAssessmentResult() {
+  const score = assessmentState.answers.filter(a => a.correct).length;
+  const passed = score >= 4;
+  document.getElementById('assessmentBody').innerHTML = `
+    <div style="text-align:center;padding:32px 0">
+      <div style="font-size:56px;margin-bottom:16px">${passed ? '🎉' : '😔'}</div>
+      <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:${passed ? 'var(--green)' : 'var(--red)'};margin-bottom:8px">
+        ${passed ? 'Shortlisted!' : 'Not this time'}
+      </div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:24px">
+        You scored <strong>${score}/5</strong> — ${passed ? "You've been shortlisted!" : "Didn't meet the passing threshold."}
+      </div>
+      <button class="btn btn-outline" style="margin:0 auto" onclick="closeModal('assessmentModal'); clearAssessment()">Close Preview</button>
+    </div>`;
+}
+
+function clearAssessment() {
+  clearInterval(assessmentState.timer);
+  assessmentState = { q: 0, answers: [], timer: null, timerVal: 30 };
+}
+
+// ─── ANALYTICS ───
+function renderAnalytics() {
+  const months = ['Sep','Oct','Nov','Dec','Jan','Feb'];
+  const vals = [45, 78, 62, 103, 89, 134];
+  const max = Math.max(...vals);
+  const colors = ['#c7d2fe','#a5b4fc','#818cf8','#6366f1','#4f46e5','#4338ca'];
+  const el = document.getElementById('bigChart');
+  if (el) el.innerHTML = vals.map((v, i) => `
+    <div class="big-bar-wrap">
+      <div class="big-bar" style="height:${(v/max)*120}px;background:${colors[i]}" data-val="${v}"></div>
+      <div class="big-bar-label">${months[i]}</div>
+    </div>`).join('');
+
+  const qPerf = [88, 38, 72, 91, 55];
+  const colors2 = ['#4ade80','#f87171','#60a5fa','#4ade80','#fbbf24'];
+  const qEl = document.getElementById('qPerfChart');
+  if (qEl) qEl.innerHTML = qPerf.map((p, i) => `
+    <div class="q-perf-row">
+      <div class="q-perf-label">Question ${i+1}</div>
+      <div class="q-perf-bg"><div class="q-perf-fill" style="width:${p}%;background:${colors2[i]}"></div></div>
+      <div class="q-perf-pct">${p}%</div>
+    </div>`).join('');
+}
+
+// ─── MODAL HELPERS ───
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) { m.classList.remove('open'); clearAssessment(); } });
+});
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function copySlug(slug) {
+  showToast('🔗 Copied: hireflow.app/apply/' + slug);
+}
+
+// ─── INIT ───
+renderMiniChart();
+renderRecent();
+renderLinks();
+renderCandidates();
+renderMCQBuilder();
+</script>
+</body>
+</html>
